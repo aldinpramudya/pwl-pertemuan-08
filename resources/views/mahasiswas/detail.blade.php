@@ -19,7 +19,7 @@
                     <li class="list-group-item"><b>TanggalLahir:
                         </b>{{$Mahasiswa->TanggalLahir}}</li>
                     <li class="list-group-item"><b>Kelas:
-                        </b>{{$Mahasiswa->Kelas}}</li>
+                        </b>{{ $Mahasiswa->Kelas->nama_kelas }}</li>
                     <li class="list-group-item"><b>Jurusan:
                         </b>{{$Mahasiswa->Jurusan}}</li>
                     <li class="list-group-item"><b>No_Handphone:

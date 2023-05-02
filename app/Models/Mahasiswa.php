@@ -19,7 +19,7 @@ class Mahasiswa extends Model
         'Nama',
         'Email',
         'TanggalLahir',
-        'Kelas',
+        'kelas_id',
         'Jurusan',
         'No_Handphone',
     ];

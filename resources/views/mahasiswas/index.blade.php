@@ -40,7 +40,7 @@
         <td>{{ $Mahasiswa->Nama }}</td>
         <td>{{ $Mahasiswa->Email }}</td>
         <td>{{ $Mahasiswa->TanggalLahir }}</td>
-        <td>{{ $Mahasiswa->Kelas }}</td>
+        <td>{{ $Mahasiswa->Kelas->nama_kelas }}</td>
         <td>{{ $Mahasiswa->Jurusan }}</td>
         <td>{{ $Mahasiswa->No_Handphone }}</td>
         <td>

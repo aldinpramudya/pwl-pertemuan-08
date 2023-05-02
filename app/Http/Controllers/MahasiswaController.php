@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use App\Models\Kelas;
 
 class MahasiswaController extends Controller
 {
@@ -20,14 +21,15 @@ class MahasiswaController extends Controller
             $mahasiswas = Mahasiswa::paginate(5);
         }
         return view('mahasiswas.index', ['mahasiswas'=>$mahasiswas]);
-    }
+    }   
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('mahasiswas.create');
+        $kelas = Kelas::all();
+        return view('mahasiswas.create',['Kelas'=>$kelas]);
     }
 
     /**
@@ -44,7 +46,22 @@ class MahasiswaController extends Controller
             'Jurusan' => 'required',
             'No_Handphone' => 'required',
         ]);
-        Mahasiswa::create($request->all());
+
+        //Fungsi Eloquent untuk menambah data
+        $mahasiswas = new Mahasiswa;
+        $mahasiswas->Nim=$request->get('Nim');
+        $mahasiswas->Nama=$request->get('Nama');
+        $mahasiswas->Email=$request->get('Email');
+        $mahasiswas->TanggalLahir=$request->get('TanggalLahir');
+        $mahasiswas->Jurusan=$request->get('Jurusan');
+        $mahasiswas->No_Handphone=$request->get('No_Handphone');
+
+        //Fungsi Eloquent untuk menmabha data belongsto
+        $kelas = new Kelas;
+        $kelas->id = $request->get('Kelas');
+
+        $mahasiswas->kelas()->associate($kelas);
+        $mahasiswas->save();
 
         return redirect()->route('mahasiswas.index')->with('success', 'Mahasiswa Berhasil Ditambahkan');
     }
