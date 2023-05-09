@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
+use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
@@ -47,16 +48,21 @@ class MahasiswaController extends Controller
             'No_Handphone' => 'required',
         ]);
 
+        if($request->file('featured_image')){
+            $path = $request->file('featured_image')->store('images', 'public');
+        }
+
         //Fungsi Eloquent untuk menambah data
         $mahasiswas = new Mahasiswa;
         $mahasiswas->Nim=$request->get('Nim');
         $mahasiswas->Nama=$request->get('Nama');
+        $mahasiswas->featured_image=$path;
         $mahasiswas->Email=$request->get('Email');
         $mahasiswas->TanggalLahir=$request->get('TanggalLahir');
         $mahasiswas->Jurusan=$request->get('Jurusan');
         $mahasiswas->No_Handphone=$request->get('No_Handphone');
 
-        //Fungsi Eloquent untuk menmabha data belongsto
+        //Fungsi Eloquent untuk menambah data belongsto
         $kelas = new Kelas;
         $kelas->id = $request->get('Kelas');
 
@@ -81,7 +87,8 @@ class MahasiswaController extends Controller
     public function edit($Nim)
     {
         $Mahasiswa = Mahasiswa::find($Nim);
-        return view('mahasiswas.edit', compact('Mahasiswa'));
+        $kelas = Kelas::all();
+        return view('mahasiswas.edit', compact('Mahasiswa'), ['Kelas' => $kelas]);
     }
 
     /**
@@ -99,9 +106,30 @@ class MahasiswaController extends Controller
             'No_Handphone' => 'required',
         ]);
 
-        Mahasiswa::find($Nim)->update($request->all());
-        return redirect()->route('mahasiswas.index')
-            ->with('success', 'Mahasiswa Berhasil Diupdate');
+        // Mahasiswa::find($Nim)->update($request->all());
+
+        $mahasiswas = Mahasiswa::with('Kelas')->where('Nim', $Nim)->first();
+        
+        if($mahasiswas->featured_image && file_exists(storage_path('app/public/'.$mahasiswas->featured_image))){
+            Storage::delete('public/'.$mahasiswas->featured_image);
+        }
+        $path = $request->file('featured_image')->store('images', 'public');
+        $mahasiswas->featured_image=$path;
+
+        $mahasiswas->Nim=$request->get('Nim');
+        $mahasiswas->Nama=$request->get('Nama');
+        $mahasiswas->Email=$request->get('Email');
+        $mahasiswas->TanggalLahir=$request->get('TanggalLahir');
+        $mahasiswas->Jurusan=$request->get('Jurusan');
+        $mahasiswas->No_Handphone=$request->get('No_Handphone');
+
+        $kelas = new Kelas;
+        $kelas->id = $request->get('Kelas');
+
+        $mahasiswas->kelas()->associate($kelas);
+        $mahasiswas->save();
+
+        return redirect()->route('mahasiswas.index')->with('success', 'Mahasiswa Berhasil Diupdate');
 
     }
 
@@ -110,7 +138,12 @@ class MahasiswaController extends Controller
      */
     public function destroy($Nim)
     {
-        Mahasiswa::find($Nim)->delete();
+        $mahasiswas = Mahasiswa::find($Nim);
+        if($mahasiswas->featured_image && file_exists(storage_path('app/public/'.$mahasiswas->featured_image))){
+            Storage::delete('public/'.$mahasiswas->featured_image);
+        }
+        $mahasiswas->matakuliah()->detach();
+        $mahasiswas->delete();
         return redirect()->route('mahasiswas.index')
             -> with('success', 'Mahasiswa Berhasil Dihapus');
 

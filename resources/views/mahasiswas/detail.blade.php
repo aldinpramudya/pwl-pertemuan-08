@@ -10,6 +10,11 @@
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
+                    <center>
+                        <li class="list-group-item"><b>Profile Picture</b><br>
+                            <img src="{{asset('storage/'. $Mahasiswa->featured_image)}}" width = "150px" alt="">
+                        </li>
+                    </center>
                     <li class="list-group-item"><b>Nim: 
                         </b>{{$Mahasiswa->Nim}}</li>
                     <li class="list-group-item"><b>Nama:

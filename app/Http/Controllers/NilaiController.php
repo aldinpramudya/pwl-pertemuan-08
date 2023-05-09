@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
 use App\Models\Mahasiswa_MataKuliah;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class NilaiController extends Controller
 {
@@ -48,7 +49,7 @@ class NilaiController extends Controller
     public function show($Nim)
     {
         $Mahasiswa = Mahasiswa::find($Nim);
-        $mahasiswa = Mahasiswa_MataKuliah::where('mahasiswa_id', $Nim)->get();
+        $mahasiswa = Mahasiswa_MataKuliah::where('mahasiswa_Nim', $Nim)->get();
         return view('nilai.detailnilai', compact('Mahasiswa', 'mahasiswa'));
     }
 
@@ -74,5 +75,12 @@ class NilaiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function cetak_pdf($Nim){
+        $nilai = Mahasiswa::find($Nim);
+        $pdf = PDF::loadview('nilai.articles_pdf',['Mahasiswa'=>$nilai]);
+        return $pdf->stream();
+
     }
 }

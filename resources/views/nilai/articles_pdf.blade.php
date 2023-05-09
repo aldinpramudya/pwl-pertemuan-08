@@ -24,7 +24,5 @@
         </tr>
         @endforeach
     </table>
-    <a class="btn btn-success mt-3" href="{{ route('mahasiswas.index') }}">Kembali</a>
-    <a class="btn btn-success mt-3" href="{{ route('mahasiswas.cetak', ['Nim' => $Mahasiswa->Nim])}}">Cetak Laporan</a>
-</div> 
+</div>
 @endsection

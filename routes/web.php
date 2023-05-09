@@ -26,4 +26,6 @@ Route::resource('mahasiswas', MahasiswaController::class);
 
 Route::resource('nilai', NilaiController::class);
 
+Route::get('/cetak/{Nim}', 'App\Http\Controllers\NilaiController@cetak_pdf')->name('mahasiswas.cetak');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

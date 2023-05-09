@@ -11,8 +11,7 @@
             <div class="card-body">
                 @if ($errors->any())
                 <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your i
-                    nput.<br><br>
+                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -20,7 +19,7 @@
                     </ul>
                 </div>
                 @endif
-                <form method="post" action="{{ route('mahasiswas.update', $Mahasiswa->Nim)}}" id="myForm">
+                <form method="post" action="{{ route('mahasiswas.update', $Mahasiswa->Nim)}}" id="myForm" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -36,12 +35,21 @@
                         <input type="Email" name="Email" class="form-control" id="Email" value="{{$Mahasiswa->Email}}" aria-describedby="Email">
                     </div>
                     <div class="form-group">
+                        <label for="featured_image">Profile Picture</label>
+                        <input type="file" class="form-control" name="featured_image" id="featured_image" value="{{$Mahasiswa->featured_image}}" aria-describedby="featured_image">
+                        <img width="100px" src="{{asset('storage/'.$Mahasiswa->featured_image)}}">
+                    </div>
+                    <div class="form-group">
                         <label for="TanggalLahir">Nama</label>
                         <input type="TanggalLahir" name="TanggalLahir" class="form-control" id="TanggalLahir" value="{{$Mahasiswa->TanggalLahir}}" aria-describedby="TanggalLahir">
                     </div>
                     <div class="form-group">
                         <label for="Kelas">Kelas</label>
-                        <input type="Kelas" name="Kelas" class="form-control" id="Kelas" value="{{$Mahasiswa->Kelas}}" aria-describedby="Kelas">
+                        <select name="Kelas" class="form-control">
+                            @foreach($Kelas as $kelas)
+                            <option value="{{$kelas->id}}">{{$kelas->nama_kelas}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="Jurusan">Jurusan</label>
